@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Google Cloud Digital Leader 対策クイズ</title>
+<style>
+  :root{
+    --blue:#1a73e8;
+    --blue-dark:#1557b0;
+    --green:#188038;
+    --green-bg:#e6f4ea;
+    --red:#d93025;
+    --red-bg:#fce8e6;
+    --yellow:#f9ab00;
+    --bg:#f6f8fc;
+    --surface:#ffffff;
+    --text:#202124;
+    --text-sub:#5f6368;
+    --border:#dfe1e5;
+    --radius:16px;
+    --shadow:0 1px 2px rgba(60,64,67,.15), 0 2px 6px rgba(60,64,67,.10);
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0;padding:0;height:100%;
+    background:var(--bg);
+    color:var(--text);
+    font-family:"Segoe UI","Hiragino Sans","Noto Sans JP","Yu Gothic",Roboto,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  #app{
+    max-width:640px;
+    margin:0 auto;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    position:relative;
+  }
+  /* ---------- Header ---------- */
+  header{
+    padding:20px 20px 12px;
+    position:sticky;
+    top:0;
+    background:var(--bg);
+    z-index:10;
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:14px;
+    color:var(--text-sub);
+    font-weight:600;
+    letter-spacing:.3px;
+  }
+  .brand .dot{width:10px;height:10px;border-radius:50%;display:inline-block;}
+  .brand .dot.b{background:var(--blue);}
+  .brand .dot.r{background:var(--red);}
+  .brand .dot.y{background:var(--yellow);}
+  .brand .dot.g{background:var(--green);}
+  h1.title{
+    font-size:22px;
+    margin:10px 0 2px;
+    font-weight:700;
+  }
+  p.subtitle{
+    margin:0;
+    color:var(--text-sub);
+    font-size:13.5px;
+  }
+  /* ---------- Main content ---------- */
+  main{
+    flex:1;
+    padding:8px 20px 40px;
+  }
+  /* ---------- Menu screen ---------- */
+  .weak-btn{
+    width:100%;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    background:linear-gradient(135deg,#fef7e0,#fce8e6);
+    border:1px solid #f6cf8b;
+    border-radius:var(--radius);
+    padding:16px 18px;
+    margin:16px 0 22px;
+    cursor:pointer;
+    box-shadow:var(--shadow);
+    text-align:left;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .weak-btn:active{transform:scale(.98);}
+  .weak-btn .icon{
+    font-size:26px;
+    width:46px;height:46px;
+    min-width:46px;
+    border-radius:50%;
+    background:#fff;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:var(--shadow);
+  }
+  .weak-btn .txt strong{
+    display:block;
+    font-size:15.5px;
+    color:#8a4b00;
+  }
+  .weak-btn .txt span{
+    display:block;
+    font-size:12.5px;
+    color:#8a4b00;
+    opacity:.85;
+    margin-top:2px;
+  }
+  .weak-btn .badge{
+    margin-left:auto;
+    background:var(--red);
+    color:#fff;
+    font-size:12px;
+    font-weight:700;
+    padding:3px 9px;
+    border-radius:999px;
+    min-width:22px;
+    text-align:center;
+  }
+  .weak-btn.empty .badge{display:none;}
+  .weak-btn.empty{opacity:.55; filter:grayscale(.4);}
+
+  .section-label{
+    font-size:12.5px;
+    color:var(--text-sub);
+    font-weight:700;
+    letter-spacing:.5px;
+    margin:0 2px 10px;
+    text-transform:uppercase;
+  }
+  .card-grid{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+  .card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:16px 16px;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    cursor:pointer;
+    box-shadow:var(--shadow);
+    transition:transform .15s ease, border-color .15s ease;
+  }
+  .card:active{transform:scale(.98);}
+  .card .num{
+    width:42px;height:42px;min-width:42px;
+    border-radius:12px;
+    display:flex;align-items:center;justify-content:center;
+    font-weight:700;
+    font-size:16px;
+    color:#fff;
+  }
+  .card:nth-child(1) .num{background:var(--blue);}
+  .card:nth-child(2) .num{background:var(--red);}
+  .card:nth-child(3) .num{background:var(--yellow);}
+  .card:nth-child(4) .num{background:var(--green);}
+  .card .body{flex:1;min-width:0;}
+  .card .body strong{
+    display:block;
+    font-size:15px;
+    margin-bottom:3px;
+  }
+  .card .body span.desc{
+    display:block;
+    font-size:12.5px;
+    color:var(--text-sub);
+    line-height:1.4;
+  }
+  .card .meta{
+    text-align:right;
+    min-width:60px;
+  }
+  .card .meta .count{
+    font-size:12px;
+    color:var(--text-sub);
+  }
+  .progress-mini{
+    height:5px;
+    width:100%;
+    background:#eef1f6;
+    border-radius:4px;
+    margin-top:6px;
+    overflow:hidden;
+  }
+  .progress-mini > div{
+    height:100%;
+    background:var(--blue);
+    border-radius:4px;
+  }
+  .chev{color:#bbb;font-size:18px;margin-left:2px;}
+
+  footer.credit{
+    text-align:center;
+    color:#9aa0a6;
+    font-size:11.5px;
+    padding:10px 0 26px;
+  }
+
+  /* ---------- Quiz screen ---------- */
+  .quiz-header{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:14px;
+  }
+  .back-btn{
+    width:38px;height:38px;
+    border-radius:50%;
+    border:1px solid var(--border);
+    background:var(--surface);
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;
+    font-size:18px;
+    color:var(--text-sub);
+    flex-shrink:0;
+  }
+  .progress-wrap{flex:1;}
+  .progress-text{
+    display:flex;
+    justify-content:space-between;
+    font-size:12.5px;
+    color:var(--text-sub);
+    margin-bottom:6px;
+  }
+  .progress-bar{
+    height:8px;
+    background:#e8eaed;
+    border-radius:6px;
+    overflow:hidden;
+  }
+  .progress-bar > div{
+    height:100%;
+    background:var(--blue);
+    border-radius:6px;
+    transition:width .25s ease;
+  }
+  .quiz-tag{
+    display:inline-block;
+    font-size:11.5px;
+    font-weight:700;
+    color:var(--blue);
+    background:#e8f0fe;
+    padding:4px 10px;
+    border-radius:999px;
+    margin-bottom:12px;
+  }
+  .question-card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:20px 18px;
+    box-shadow:var(--shadow);
+    margin-bottom:16px;
+  }
+  .question-text{
+    font-size:16.5px;
+    font-weight:600;
+    line-height:1.55;
+    margin:0;
+  }
+  .choices{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .choice{
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+    background:var(--surface);
+    border:1.5px solid var(--border);
+    border-radius:12px;
+    padding:13px 14px;
+    cursor:pointer;
+    font-size:14.5px;
+    line-height:1.5;
+    transition:border-color .15s ease, background .15s ease;
+  }
+  .choice:not(.disabled):hover{
+    border-color:var(--blue);
+    background:#f5f9ff;
+  }
+  .choice .badge-letter{
+    width:26px;height:26px;min-width:26px;
+    border-radius:50%;
+    background:#eef1f6;
+    color:var(--text-sub);
+    font-weight:700;
+    font-size:12.5px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .choice.correct{
+    border-color:var(--green);
+    background:var(--green-bg);
+  }
+  .choice.correct .badge-letter{background:var(--green);color:#fff;}
+  .choice.incorrect{
+    border-color:var(--red);
+    background:var(--red-bg);
+  }
+  .choice.incorrect .badge-letter{background:var(--red);color:#fff;}
+  .choice.disabled{cursor:default;}
+  .choice.dim{opacity:.55;}
+  .result-icon{
+    margin-left:auto;
+    font-weight:700;
+    font-size:16px;
+  }
+  .choice.correct .result-icon{color:var(--green);}
+  .choice.incorrect .result-icon{color:var(--red);}
+
+  .explain-box{
+    margin-top:16px;
+    padding:16px;
+    border-radius:14px;
+    background:#eef4fc;
+    border:1px solid #d3e3fd;
+    font-size:13.5px;
+    line-height:1.7;
+    color:#1f3a5f;
+    animation:fadeIn .25s ease;
+  }
+  .explain-box.wrong-mode{
+    background:#fff8e5;
+    border-color:#fbe3a3;
+    color:#5a4300;
+  }
+  .explain-box strong.label{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-size:13px;
+    color:var(--blue);
+    margin-bottom:8px;
+    text-transform:uppercase;
+    letter-spacing:.4px;
+  }
+  @keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+  .next-btn{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:14px;
+    background:var(--blue);
+    color:#fff;
+    font-size:15.5px;
+    font-weight:700;
+    cursor:pointer;
+    margin-top:16px;
+    box-shadow:0 2px 8px rgba(26,115,232,.35);
+    transition:background .15s ease, transform .1s ease;
+  }
+  .next-btn:active{transform:scale(.98);}
+  .next-btn:hover{background:var(--blue-dark);}
+
+  /* ---------- Result screen ---------- */
+  .result-wrap{
+    text-align:center;
+    padding:30px 10px 10px;
+  }
+  .result-ring{
+    width:150px;height:150px;
+    border-radius:50%;
+    margin:0 auto 20px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:conic-gradient(var(--blue) calc(var(--pct)*1%), #e8eaed 0);
+    position:relative;
+  }
+  .result-ring::before{
+    content:"";
+    position:absolute;
+    width:118px;height:118px;
+    border-radius:50%;
+    background:var(--bg);
+  }
+  .result-ring .pct{
+    position:relative;
+    font-size:30px;
+    font-weight:800;
+    color:var(--text);
+  }
+  .result-ring .pct span{display:block;font-size:12px;font-weight:600;color:var(--text-sub);}
+  .result-title{font-size:19px;font-weight:700;margin:6px 0 4px;}
+  .result-sub{color:var(--text-sub);font-size:13.5px;margin-bottom:26px;}
+  .result-stats{
+    display:flex;
+    justify-content:center;
+    gap:14px;
+    margin-bottom:26px;
+  }
+  .stat-pill{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:12px 18px;
+    min-width:90px;
+    box-shadow:var(--shadow);
+  }
+  .stat-pill .n{font-size:20px;font-weight:800;}
+  .stat-pill.ok .n{color:var(--green);}
+  .stat-pill.ng .n{color:var(--red);}
+  .stat-pill .l{font-size:11.5px;color:var(--text-sub);margin-top:2px;}
+  .result-actions{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .btn-secondary{
+    width:100%;
+    padding:14px;
+    border-radius:14px;
+    border:1.5px solid var(--border);
+    background:var(--surface);
+    color:var(--text);
+    font-size:14.5px;
+    font-weight:700;
+    cursor:pointer;
+  }
+  .btn-secondary:hover{border-color:var(--blue);color:var(--blue);}
+
+  .empty-state{
+    text-align:center;
+    padding:60px 20px;
+    color:var(--text-sub);
+  }
+  .empty-state .emoji{font-size:44px;display:block;margin-bottom:14px;}
+
+  [hidden]{display:none!important;}
+
+  @media (max-width:380px){
+    h1.title{font-size:19px;}
+    .question-text{font-size:15.5px;}
+  }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <header>
+    <div class="brand">
+      <span class="dot b"></span><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+      &nbsp;GOOGLE CLOUD 認定資格対策
+    </div>
+    <h1 class="title" id="headerTitle">Digital Leader クイズ</h1>
+    <p class="subtitle" id="headerSubtitle">試験ガイドに沿った4セクション・全問演習</p>
+  </header>
+
+  <main id="main"></main>
+
+  <footer class="credit">Google Cloud Digital Leader 対策アプリ（非公式・学習用）</footer>
+</div>
+
+<script>
+/* =========================================================
+   1. 問題データ
+   ========================================================= */
+const QUESTIONS = [
+/* ---------------- セクション1: デジタル トランスフォーメーション ---------------- */
+{id:"s1-01",section:1,q:"クラウドコンピューティングの基本的な特徴として一般的に挙げられないものはどれですか。",
+ choices:["オンデマンドのセルフサービス（必要な時にすぐ利用開始できる）","幅広いネットワークアクセス","利用量に関わらず固定された容量を事前に契約する仕組み","迅速な拡張性（リソースを柔軟に増減できる）"],
+ correct:2,
+ explain:"クラウドの本質は、需要に応じてリソースを柔軟に増減できる「迅速な弾力性」と、使った分だけ支払う従量課金にあります。「固定された容量を事前に契約する」という考え方は、従来のオンプレミス調達に近いモデルであり、クラウドの特徴とは言えません。"},
+
+{id:"s1-02",section:1,q:"クラウド移行によって、サーバー購入などの「設備投資（CapEx）」が「運用費用（OpEx）」に変わることの説明として最も適切なものはどれですか。",
+ choices:["ハードウェアを自社で保有せず、使用した分だけを継続的な運用コストとして支払うようになる","初期費用が増加し、月々の支払いがなくなる","OpExはCapExよりも常に高額になる","クラウド利用では会計処理上の区分がなくなる"],
+ correct:0,
+ explain:"オンプレミスでは高額なサーバーを事前購入する必要があり、これはCapEx（資本的支出）に分類されます。クラウドでは自社でハードウェアを保有せず、使用量に応じて継続的に料金を支払うため、OpEx（運用費用）として計上され、初期投資の負担を大きく軽減できます。"},
+
+{id:"s1-03",section:1,q:"サーバーレスコンピューティングを採用する主なビジネス上のメリットは何ですか。",
+ choices:["サーバーのOSアップデートを手動で管理できるようになる","インフラの管理やサーバーのプロビジョニングから解放され、コードの記述に集中できる","常に一定数のサーバーを起動し続ける必要がある","ネットワーク構成を毎回手動で設定する必要がある"],
+ correct:1,
+ explain:"サーバーレスとは「サーバーが存在しない」という意味ではなく、開発者がサーバーの管理（プロビジョニング、パッチ適用、スケーリングなど）を意識する必要がなく、ビジネスロジックの開発に集中できるモデルを指します。Cloud RunやCloud Functionsが代表例です。"},
+
+{id:"s1-04",section:1,q:"Google Cloudが謳う「クラウドの主なメリット」として通常含まれないものはどれですか。",
+ choices:["俊敏性（ビジネスの変化に素早く対応できる）","コスト効率（必要な分だけ支払う）","従業員の物理的なオフィス出社を義務付けること","グローバルなスケールでの拡張性"],
+ correct:2,
+ explain:"クラウドの価値は、俊敏性、コスト効率、拡張性、セキュリティ、コラボレーションの向上などにあります。従業員の出社義務はクラウドサービス自体の特徴とは無関係であり、むしろクラウドはリモートワークやどこからでもアクセスできる働き方を後押しします。"},
+
+{id:"s1-05",section:1,q:"Compute Engine（仮想マシンサービス）は、クラウドサービスモデルのどれに分類されますか。",
+ choices:["SaaS（Software as a Service）","PaaS（Platform as a Service）","IaaS（Infrastructure as a Service）","FaaS（Function as a Service）のみ"],
+ correct:2,
+ explain:"Compute Engineは仮想マシン（インフラ）そのものをユーザーに提供し、OSやミドルウェアの管理はユーザー側の責任範囲となるため、IaaS（Infrastructure as a Service）に分類されます。"},
+
+{id:"s1-06",section:1,q:"App Engineのように、インフラ管理を意識せずアプリケーションのコードをデプロイするだけで実行できるサービスは、どのモデルに該当しますか。",
+ choices:["IaaS","PaaS（Platform as a Service）","オンプレミス","コロケーション"],
+ correct:1,
+ explain:"App EngineはOSやサーバーの管理をGoogleが行い、開発者はアプリケーションコードの開発に専念できるプラットフォームを提供するため、PaaS（Platform as a Service）に分類されます。Google WorkspaceのようなSaaSとは異なり、開発基盤を提供する点が特徴です。"},
+
+{id:"s1-07",section:1,q:"TCO（総所有コスト）の観点から、クラウド移行が企業にもたらす一般的な効果として正しいものはどれですか。",
+ choices:["ハードウェアの保守・冷却・電力・人件費などの間接コストも含めて削減できる可能性がある","TCOはクラウドでは計算できない指標である","サーバーの購入費用だけがTCOに含まれる","TCOはソフトウェアライセンス費用のみを指す"],
+ correct:0,
+ explain:"TCO（Total Cost of Ownership）は、購入費用だけでなく、運用・保守・電力・冷却・人件費・老朽化対応など、システムを保有する上でかかる全コストを指します。クラウドではこれらの多くをプロバイダーが負担するため、TCOの削減につながる場合が多いとされています。"},
+
+{id:"s1-08",section:1,q:"クラウドの「弾力性（Elasticity）」とはどのような性質を指しますか。",
+ choices:["一度確保したリソースは削減できない性質","需要の増減に応じて、リソースを自動的かつ迅速に拡大・縮小できる性質","常に最大容量でリソースを稼働させ続ける性質","リソースの価格が変動しない性質"],
+ correct:1,
+ explain:"弾力性とは、トラフィックの急増時にはリソースを自動的にスケールアップし、需要が落ち着けばスケールダウンできる性質のことです。これにより、ピーク時の性能を確保しつつ、無駄なコストを抑えることができます。"},
+
+{id:"s1-09",section:1,q:"ハイブリッドクラウドの説明として最も適切なものはどれですか。",
+ choices:["単一のパブリッククラウドプロバイダーのみを利用する構成","オンプレミス環境とパブリッククラウド環境を組み合わせて利用する構成","すべてのデータをオンプレミスにのみ保存する構成","複数のパブリッククラウドプロバイダーのみを組み合わせて利用する構成"],
+ correct:1,
+ explain:"ハイブリッドクラウドとは、既存のオンプレミス（自社データセンター）のインフラと、パブリッククラウドを連携させて利用する構成です。段階的な移行や、規制上オンプレミスに残す必要があるデータを扱う場合などに採用されます。"},
+
+{id:"s1-10",section:1,q:"複数の異なるクラウドプロバイダーのサービスを組み合わせて利用する「マルチクラウド」戦略のメリットとして適切なものはどれですか。",
+ choices:["特定ベンダーへの依存（ロックイン）を避け、各社の得意分野を使い分けられる","管理がシンプルになり、契約先は1社のみになる","必ずコストが最も安くなることが保証される","セキュリティ対策が不要になる"],
+ correct:0,
+ explain:"マルチクラウドは、特定ベンダーへのロックインを避け、各クラウドの強み（例：あるサービスのAI機能、別サービスの価格など）を使い分けられる点が主なメリットです。一方で管理の複雑性は増す傾向があります。"},
+
+{id:"s1-11",section:1,q:"データドリブンな組織文化を実現する上で、クラウドが果たす役割として最も適切なものはどれですか。",
+ choices:["データを分散させたまま統合せず放置すること","大量のデータを収集・保存・分析するための拡張性の高い基盤を提供すること","データ分析を完全に人手作業に置き換えること","データの利用を一部の部署に限定すること"],
+ correct:1,
+ explain:"クラウドはBigQueryのような大規模データ分析基盤や、AI/MLツールを容易に利用できる環境を提供し、組織全体でデータに基づいた意思決定（データドリブン経営）を行うための土台となります。"},
+
+{id:"s1-12",section:1,q:"「デジタルトランスフォーメーション（DX）」の本質的な意味として最も適切なものはどれですか。",
+ choices:["既存の業務プロセスを一切変えずにITツールだけを入れ替えること","テクノロジーを活用して、ビジネスモデルや組織文化そのものを変革すること","紙の書類をすべてPDF化するだけの取り組み","IT部門のみで完結する技術的な取り組み"],
+ correct:1,
+ explain:"DXは単なるITツールの導入（デジタイゼーション）にとどまらず、テクノロジーを活用してビジネスモデル、顧客体験、組織文化を根本から変革することを指します。経営戦略として全社的に取り組む必要がある点が重要です。"},
+
+{id:"s1-13",section:1,q:"クラウドの「従量課金制（Pay-as-you-go）」がもたらす利点として正しいものはどれですか。",
+ choices:["常に一定額を前払いする必要がある","使用した分だけの支払いで済み、需要予測を誤った際の過剰投資リスクを減らせる","利用量に関わらず料金が一定になる","契約後の解約が一切できなくなる"],
+ correct:1,
+ explain:"従量課金制では、実際に使用したリソースの分だけ支払うため、需要を過大に見積もって余分な設備投資を行うリスクを避けられます。これはクラウド最大の経済的メリットの一つです。"},
+
+/* ---------------- セクション2: イノベーション（データ・AI/ML） ---------------- */
+{id:"s2-01",section:2,q:"BigQueryの特徴として最も適切な説明はどれですか。",
+ choices:["インフラ管理が不要なサーバーレスのマルチクラウド対応データウェアハウス","仮想マシン専用のOSイメージ管理ツール","動画のトランスコーディング専用サービス","VPCネットワークの構成管理ツール"],
+ correct:0,
+ explain:"BigQueryは、SQLを用いてペタバイト規模のデータを高速に分析できるサーバーレスのデータウェアハウスです。インフラのプロビジョニングや管理が不要で、ストレージとコンピューティングが分離されたスケーラブルな設計になっています。"},
+
+{id:"s2-02",section:2,q:"Vertex AIが提供する主な役割として最も適切なものはどれですか。",
+ choices:["請求管理と予算アラートの専用ツール","機械学習モデルの構築・トレーニング・デプロイ・管理を統合的に行うプラットフォーム","仮想ネットワークのファイアウォール設定ツール","オブジェクトストレージのバックアップ専用ツール"],
+ correct:1,
+ explain:"Vertex AIは、独自モデルのトレーニングからGeminiなどの生成AI基盤モデルの利用まで、機械学習のライフサイクル全体を一つのプラットフォームでカバーするGoogle CloudのAI/MLサービスです。"},
+
+{id:"s2-03",section:2,q:"グローバルに分散しながらも強整合性を持つトランザクション処理が必要な金融系システムに最も適したデータベースはどれですか。",
+ choices:["Cloud Storage","Cloud Spanner","Cloud Bigtable単体","ローカルディスク上のファイル"],
+ correct:1,
+ explain:"Cloud Spannerは、リレーショナルデータベースの強整合性・トランザクション機能と、NoSQLの水平スケーラビリティを両立させた、グローバル分散データベースです。金融取引など高い一貫性が要求される用途に適しています。"},
+
+{id:"s2-04",section:2,q:"IoTセンサーからの大量の時系列データを、低レイテンシで書き込み・読み取りする必要があるユースケースに最適なサービスはどれですか。",
+ choices:["Cloud Bigtable","Cloud SQL","BigQuery BI Engine単体","Cloud Identity"],
+ correct:0,
+ explain:"Cloud Bigtableは、大規模な分析ワークロードや時系列データ、IoTデータのように、高スループットかつ低レイテンシな読み書きが求められるNoSQLデータベースとして設計されています。"},
+
+{id:"s2-05",section:2,q:"モバイルアプリのバックエンドで、リアルタイム同期が必要なドキュメント指向のデータストアとして適しているサービスはどれですか。",
+ choices:["Firestore","Cloud Dataproc","Cloud Interconnect","Persistent Disk"],
+ correct:0,
+ explain:"Firestoreは、モバイル・ウェブアプリ向けに設計されたドキュメント指向のNoSQLデータベースで、クライアント間のリアルタイムなデータ同期やオフライン対応の機能を備えています。"},
+
+{id:"s2-06",section:2,q:"複数のマイクロサービス間でメッセージを非同期にやり取りし、システム同士を疎結合にするために使われるサービスはどれですか。",
+ choices:["Pub/Sub","Cloud DNS","Cloud Armor","Artifact Registry"],
+ correct:0,
+ explain:"Pub/Subは、パブリッシャーとサブスクライバー間で非同期にメッセージをやり取りするマネージド型のメッセージングサービスで、システム間の依存関係を減らし、疎結合なイベント駆動アーキテクチャの構築を可能にします。"},
+
+{id:"s2-07",section:2,q:"リアルタイムのストリーミングデータと、過去データのバッチ処理の両方を同じプログラミングモデルで実行できるサービスはどれですか。",
+ choices:["Cloud Dataflow","Cloud Build","Cloud CDN","Secret Manager"],
+ correct:0,
+ explain:"Cloud Dataflowは、Apache Beamをベースにしたフルマネージドのデータ処理サービスで、バッチ処理とストリーミング処理を統一されたモデルで実行できます。ETLパイプラインの構築などによく利用されます。"},
+
+{id:"s2-08",section:2,q:"既存のHadoopやSparkのワークロードをクラウド上でそのまま実行したい場合に適したマネージドサービスはどれですか。",
+ choices:["Cloud Dataproc","Cloud Functions","Cloud Scheduler","Container Registry"],
+ correct:0,
+ explain:"Cloud Dataprocは、Hadoop、Spark、Hiveなどのオープンソースのビッグデータ処理フレームワークをマネージドクラスタとして簡単に実行できるサービスで、既存資産をクラウドに移行する際に活用されます。"},
+
+{id:"s2-09",section:2,q:"事前学習済みのAIモデルを使って、画像内の物体・顔・テキストを認識したい場合に利用できるサービスはどれですか。",
+ choices:["Vision API","Cloud NAT","VPC Service Controls","Cloud Key Management Service"],
+ correct:0,
+ explain:"Vision APIは、機械学習の専門知識がなくても、画像内の物体検出、顔検出、文字認識（OCR）などを簡単なAPI呼び出しで実現できる、Google Cloudの事前学習済みAIサービスの一つです。"},
+
+{id:"s2-10",section:2,q:"生成AI（Generative AI）とGeminiのような大規模言語モデル（LLM）に関する説明として最も適切なものはどれですか。",
+ choices:["あらかじめ用意された回答をデータベースから検索して表示するだけの技術である","大量のテキストなどのデータから学習し、新しい文章・画像・コードなどのコンテンツを生成できるAIモデルである","特定の四則演算のみを高速に実行するための専用ハードウェアである","ネットワークの帯域幅を制御するための技術である"],
+ correct:1,
+ explain:"生成AIは、大量のデータから学習したパターンをもとに、新しい文章、画像、音声、コードなどのオリジナルコンテンツを生成できるAI技術です。GeminiはGoogleが開発したマルチモーダル対応の大規模言語モデルで、Vertex AIなどを通じて利用できます。"},
+
+{id:"s2-11",section:2,q:"データレイクとデータウェアハウスの違いに関する説明として最も適切なものはどれですか。",
+ choices:["データレイクは構造化・非構造化を問わず生データをそのまま蓄積でき、データウェアハウスは主に構造化・整形済みデータを分析用途向けに格納する","両者はまったく同じ概念であり違いはない","データウェアハウスは動画や画像などの非構造化データ専用の仕組みである","データレイクは必ずリレーショナルデータベースの形式で保存される"],
+ correct:0,
+ explain:"データレイク（Cloud Storageなど）は形式を問わず生データをそのまま蓄積するための柔軟なストレージであり、データウェアハウス（BigQueryなど）は分析しやすいように整形・構造化されたデータを高速にクエリするための仕組みです。両者は補完関係にあります。"},
+
+{id:"s2-12",section:2,q:"企業が自社データを用いて、需要予測や異常検知などのカスタムAIモデルを構築したい場合、Google Cloudが提供する統合的なアプローチとして最も適切なものはどれですか。",
+ choices:["Vertex AIを利用して、データの準備からモデルのトレーニング・デプロイまでを一貫して行う","すべてのモデルをオンプレミスで手動構築しなければならない","AIモデルの構築にはクラウドを一切利用できない","スプレッドシートの数式のみで対応する"],
+ correct:0,
+ explain:"Vertex AIは、データの前処理、モデルのトレーニング、評価、デプロイ、モニタリングまでの機械学習ライフサイクル全体を単一のプラットフォームでサポートしており、カスタムAIモデルの開発を効率化します。"},
+
+/* ---------------- セクション3: インフラとアプリケーションの最新化 ---------------- */
+{id:"s3-01",section:3,q:"仮想マシンを柔軟に作成・カスタマイズし、OSレベルまでの制御が必要なワークロードに適したサービスはどれですか。",
+ choices:["Compute Engine","Cloud Functions","Firestore","Cloud Pub/Sub"],
+ correct:0,
+ explain:"Compute Engineは、CPU、メモリ、OSイメージなどを自由にカスタマイズできる仮想マシン（IaaS）サービスであり、既存のオンプレミスサーバーをそのままの構成に近い形で移行したい場合などに適しています。"},
+
+{id:"s3-02",section:3,q:"コンテナ化されたアプリケーションを大規模にオーケストレーションし、自動スケーリングや自己修復機能を活用したい場合に適したサービスはどれですか。",
+ choices:["Google Kubernetes Engine（GKE）","Cloud SQL","Cloud DNS","Persistent Disk"],
+ correct:0,
+ explain:"GKEは、Kubernetesをベースにしたマネージドコンテナオーケストレーションサービスで、多数のコンテナの自動デプロイ、スケーリング、自己修復（障害時の自動再起動）などを実現します。"},
+
+{id:"s3-03",section:3,q:"コンテナイメージをそのままデプロイでき、リクエストがない間は自動的にゼロまでスケールインしてコストを抑えられるサーバーレスサービスはどれですか。",
+ choices:["Cloud Run","Compute Engine","Filestore","Cloud Interconnect"],
+ correct:0,
+ explain:"Cloud Runは、コンテナ化されたアプリケーションをサーバーレスで実行できるサービスで、トラフィックがない場合は自動的にゼロインスタンスまでスケールし、実行時間に応じた課金でコストを最適化できます。"},
+
+{id:"s3-04",section:3,q:"インフラを一切意識せずにコードをアップロードするだけでWebアプリケーションを稼働させたい開発者に適したPaaSサービスはどれですか。",
+ choices:["App Engine","Cloud Bigtable","Cloud Armor","VPC Service Controls"],
+ correct:0,
+ explain:"App Engineは、サーバーの構成やスケーリングをGoogleが自動的に管理するフルマネージドのPaaSであり、開発者はコードの記述とデプロイに集中できます。"},
+
+{id:"s3-05",section:3,q:"特定のイベント（例：ファイルがアップロードされた時）をトリガーとして、単一の関数だけを実行したい場合に最適なサービスはどれですか。",
+ choices:["Cloud Functions","Cloud Spanner","Cloud Load Balancing","Cloud Storage単体のみ"],
+ correct:0,
+ explain:"Cloud Functionsは、特定のイベント（HTTPリクエスト、Cloud Storageへのファイルアップロード、Pub/Subメッセージなど）をトリガーとして、サーバー管理不要で単一の関数コードを実行できるFaaS（Function as a Service）です。"},
+
+{id:"s3-06",section:3,q:"既存のオンプレミスサーバーの構成をほぼ変更せずに、そのままクラウドの仮想マシンへ移行する移行戦略は何と呼ばれますか。",
+ choices:["リフト・アンド・シフト（Lift and Shift）","グリーンフィールド開発","リタイア（廃止）","フルスクラッチ再構築"],
+ correct:0,
+ explain:"リフト・アンド・シフトは、アプリケーションの構成をほとんど変更せずに、既存のサーバー環境をそのままクラウドの仮想マシン（Compute Engineなど）に移す移行方法です。移行スピードが速い一方、クラウドネイティブな機能を十分に活用できない場合があります。"},
+
+{id:"s3-07",section:3,q:"クラウド移行の際に、アプリケーションの一部をコンテナ化するなど軽微な最適化を加えつつ移行する戦略は一般に何と呼ばれますか。",
+ choices:["リプラットフォーム（Replatform）","リタイア","そのまま何もしない放置","完全な手動再構築のみ"],
+ correct:0,
+ explain:"リプラットフォームは、アプリケーションの中核的なアーキテクチャは維持しつつ、コンテナ化やマネージドデータベースへの切り替えなど、クラウドの利点を活かすための最小限の最適化を加える移行アプローチです。"},
+
+{id:"s3-08",section:3,q:"Google Cloud上でリソース同士を安全に接続するための、論理的に分離された仮想ネットワーク環境を提供するサービスはどれですか。",
+ choices:["VPC（Virtual Private Cloud）","BigQuery","Cloud Tasks","Container Registry"],
+ correct:0,
+ explain:"VPCは、Google Cloud上にプロジェクトごとの論理的に分離されたプライベートネットワーク空間を提供し、サブネットやファイアウォールルールを用いてリソース間の通信を制御できる仕組みです。"},
+
+{id:"s3-09",section:3,q:"オンプレミス、Google Cloud、他社クラウドにまたがるKubernetes環境を単一のツールセットで一貫して管理したい場合に適したサービスはどれですか。",
+ choices:["Anthos","Cloud Filestore","Cloud CDN","Identity Platform"],
+ correct:0,
+ explain:"Anthosは、オンプレミスや複数のクラウドプロバイダーにまたがる環境を、単一の管理コンソールとポリシーで一貫して運用できるようにするハイブリッド・マルチクラウドプラットフォームです。"},
+
+{id:"s3-10",section:3,q:"アプリケーションをコンテナ化することの一般的なメリットとして最も適切なものはどれですか。",
+ choices:["OSごと含めた巨大なイメージになり、起動が必ず遅くなる","「一度作成すればどこでも実行できる」可搬性が高まり、環境差異による不具合を減らせる","コンテナは仮想マシンよりも常に多くのリソースを消費する","アプリケーションの依存関係を意図的に無視できる"],
+ correct:1,
+ explain:"コンテナは、アプリケーションとその依存関係をまとめてパッケージ化するため、開発環境・テスト環境・本番環境間での差異（「自分の環境では動いた」問題）を減らし、高い可搬性と軽量な実行を実現します。"},
+
+{id:"s3-11",section:3,q:"急激なトラフィック増加時にも、複数のバックエンドインスタンスへリクエストを自動的に分散し、可用性を高める仕組みはどれですか。",
+ choices:["Cloud Load Balancing","Cloud Key Management Service","Secret Manager","Cloud Source Repositories"],
+ correct:0,
+ explain:"Cloud Load Balancingは、受信トラフィックを複数のバックエンドリソース（VMやコンテナなど）に自動的に分散させることで、単一障害点をなくし、システムの可用性とスケーラビリティを高めるサービスです。"},
+
+{id:"s3-12",section:3,q:"「インフラ管理は最小限にしたいが、リクエストの急増にも対応できるコンテナベースのWebアプリを素早く公開したい」という要件に最も合うサービスはどれですか。",
+ choices:["Cloud Run","オンプレミスの物理サーバー新規購入","手動構成のベアメタルサーバー","テープバックアップ装置"],
+ correct:0,
+ explain:"Cloud Runは、コンテナイメージをデプロイするだけで、インフラ管理をほぼ意識せずに自動スケーリングするサーバーレス環境を実現できるため、この要件に最も適しています。"},
+
+/* ---------------- セクション4: セキュリティ、オペレーション、料金、サポート ---------------- */
+{id:"s4-01",section:4,q:"Identity and Access Management（IAM）が管理する内容として最も適切な説明はどれですか。",
+ choices:["誰が（メンバー）、どのリソースに対して、何ができるか（ロール）を制御する仕組み","ネットワークの帯域幅を制御する仕組み","仮想マシンのCPU使用率を監視する仕組み","データのバックアップスケジュールのみを管理する仕組み"],
+ correct:0,
+ explain:"IAMは、「誰が（Identity）」「どのリソースに対して」「どのような操作（ロールに紐づく権限）を行えるか」を一元的に管理する仕組みであり、最小権限の原則に基づいたアクセス制御を実現します。"},
+
+{id:"s4-02",section:4,q:"クラウドにおける「責任共有モデル（Shared Responsibility Model）」の説明として最も適切なものはどれですか。",
+ choices:["クラウド事業者がすべてのセキュリティ責任を負い、利用者は何もする必要がない","利用者がすべてのセキュリティ責任を負い、事業者は何もしない","クラウド事業者が基盤インフラのセキュリティを担い、利用者はデータやアクセス管理などクラウド内での使い方に責任を持つ","責任の所在は契約書に一切記載されない"],
+ correct:2,
+ explain:"責任共有モデルでは、Googleのようなクラウド事業者は物理的なデータセンターやネットワーク基盤などの「クラウドの安全性」を担い、利用者はIAM設定、データの分類、アクセス権限管理など「クラウド内の安全な利用」に責任を持ちます。責任範囲はサービスモデル（IaaS/PaaS/SaaS）によっても変化します。"},
+
+{id:"s4-03",section:4,q:"「最小権限の原則（Principle of Least Privilege）」の説明として最も適切なものはどれですか。",
+ choices:["すべてのユーザーに管理者権限を付与し、利便性を最優先する","ユーザーやサービスには、業務を遂行するために必要最小限の権限のみを付与する","権限管理は不要であり、誰でも自由にアクセスできるようにする","パスワードを設定しないことで管理を簡略化する"],
+ correct:1,
+ explain:"最小権限の原則とは、ユーザーやサービスアカウントに対して、業務上必要な範囲を超える権限を与えないという考え方です。これにより、アカウントの侵害時などにおける被害範囲を最小限に抑えることができます。"},
+
+{id:"s4-04",section:4,q:"Google Cloudに保存されるデータの暗号化に関する説明として正しいものはどれですか。",
+ choices:["ユーザーが個別に暗号化を有効化しない限り、データは常に平文で保存される","Google Cloudでは、保管中のデータはデフォルトで自動的に暗号化される","暗号化は追加料金を支払った場合のみ利用できる機能である","暗号化キーはユーザーが管理することを一切許可されていない"],
+ correct:1,
+ explain:"Google Cloudでは、保管中のデータ（Data at Rest）はデフォルトで自動的に暗号化される仕組みになっています。加えて、Cloud KMSなどを用いてユーザー自身が暗号鍵を管理するオプションも用意されています。"},
+
+{id:"s4-05",section:4,q:"特定の仮想マシンを月の大部分にわたって継続的に稼働させた場合に、自動的に適用される料金の割引はどれですか。",
+ choices:["継続利用割引（Sustained Use Discount）","初回登録割引","広告視聴による割引","データ削除による割引"],
+ correct:0,
+ explain:"継続利用割引は、特定の月の中で仮想マシンを長時間稼働させた場合に、追加の申請や契約なしで自動的に適用される料金割引です。利用時間が長いほど段階的に割引率が上がります。"},
+
+{id:"s4-06",section:4,q:"今後1年間または3年間、特定量のコンピューティングリソースを継続利用することを事前にコミットすることで、大幅な割引を受けられる料金モデルはどれですか。",
+ choices:["確約利用割引（Committed Use Discount）","従量課金のみのオンデマンド料金","無料枠のみ","スポットVMのみ"],
+ correct:0,
+ explain:"確約利用割引（CUD）は、1年または3年間にわたり一定量のリソース使用を事前にコミットすることで、オンデマンド料金と比較して大幅な割引（最大数十%）を受けられる料金モデルです。安定した需要が見込まれるワークロードに適しています。"},
+
+{id:"s4-07",section:4,q:"導入前に、想定する構成でおおよその月額料金を見積もりたい場合に利用できるGoogle Cloudの公式ツールはどれですか。",
+ choices:["Google Cloud 料金計算ツール（Pricing Calculator）","Cloud Shell","Cloud Source Repositories","IAM Recommender"],
+ correct:0,
+ explain:"Google Cloudの料金計算ツール（Pricing Calculator）を使うと、使用予定のサービスやリージョン、使用量を入力するだけで、想定される月額費用の見積もりを事前に確認できます。"},
+
+{id:"s4-08",section:4,q:"Google Cloudのサポートプランに関する一般的な説明として正しいものはどれですか。",
+ choices:["サポートプランは1種類のみで、内容を選択することはできない","Basic、Standard、Enhanced、Premiumなど、応答時間や対応範囲が異なる複数の階層が用意されている","無料枠のアカウントであっても24時間365日の電話サポートが自動的に付与される","サポートは有償プランであっても提供されない"],
+ correct:1,
+ explain:"Google Cloudには、ビジネスの規模やニーズに応じて選べる複数のサポートプラン（Basic、Standard、Enhanced、Premiumなど）が用意されており、プランによって応答時間やサポートチャネル、対応範囲が異なります。"},
+
+{id:"s4-09",section:4,q:"稼働中のリソースのパフォーマンス指標（CPU使用率、メモリ、ネットワークなど）を可視化し、しきい値を超えた際にアラートを出す運用サービスはどれですか。",
+ choices:["Cloud Monitoring","Cloud Build","Artifact Registry","Cloud Scheduler"],
+ correct:0,
+ explain:"Cloud Monitoringは、Google Cloud上のリソースやアプリケーションのパフォーマンス指標を収集・可視化し、異常値やしきい値超過を検知した際にアラートを発報できる運用管理サービスです。"},
+
+{id:"s4-10",section:4,q:"アプリケーションやシステムから出力されるログを収集・検索・分析するためのサービスはどれですか。",
+ choices:["Cloud Logging","Cloud CDN","Persistent Disk","VPC Peering"],
+ correct:0,
+ explain:"Cloud Loggingは、Google Cloud上のリソースやアプリケーションから生成されるログをリアルタイムに収集・保存し、検索やフィルタリング、他サービスとの連携（アラートなど）を可能にするサービスです。"},
+
+{id:"s4-11",section:4,q:"組織全体で「特定のリージョン以外へのリソース作成を禁止する」といった全社的なガバナンスルールを一元的に適用したい場合に使うサービスはどれですか。",
+ choices:["組織のポリシー サービス（Organization Policy Service）","Cloud Functions","BigQuery ML","Cloud Filestore"],
+ correct:0,
+ explain:"組織のポリシー サービスを利用すると、組織・フォルダ・プロジェクト単位で、リソース作成の制約（利用可能リージョンの制限など）を一元的に定義・強制でき、全社的なガバナンスを効率的に維持できます。"},
+
+{id:"s4-12",section:4,q:"金融や医療などの規制業界において、クラウド事業者が第三者認証（コンプライアンス認証）を取得していることが重視される理由として最も適切なものはどれですか。",
+ choices:["認証の有無はビジネスに一切関係がないため","認証を取得することで、法令や業界基準への準拠状況を客観的に証明でき、監査対応や取引先への説明が容易になるため","認証を取得すると料金が必ず半額になるため","認証はマーケティング目的のみに使われ、実態を伴わないため"],
+ correct:1,
+ explain:"ISO認証やSOC報告書などの第三者コンプライアンス認証は、クラウド事業者が業界標準や法規制の要件を満たしていることを客観的に証明するものであり、規制の厳しい業界の企業が安心してクラウドを採用し、監査に対応するための重要な判断材料となります。"},
+
+{id:"s4-13",section:4,q:"クラウド利用料金が想定を超えて増加することを防ぐために、あらかじめ月間の支出上限の目安を設定し、超過が見込まれる際に通知を受け取れる仕組みはどれですか。",
+ choices:["予算とアラート（Budgets and alerts）","Cloud Trace","Cloud Profiler","Error Reporting"],
+ correct:0,
+ explain:"予算とアラート機能を使うと、プロジェクトや請求先アカウントごとに月間の予算額を設定し、実際の支出や予測支出が一定の割合に達した際に、メールなどで通知を受け取ることができます。これによりコストの見える化と予期しない支出の防止が可能になります。"}
+];
+
+const SECTION_META = {
+  1:{title:"デジタル トランスフォーメーション", desc:"クラウドの価値・ビジネス変革", color:"var(--blue)"},
+  2:{title:"イノベーション", desc:"データ活用・AI/ML", color:"var(--red)"},
+  3:{title:"インフラとアプリケーションの最新化", desc:"コンピューティング・移行戦略", color:"var(--yellow)"},
+  4:{title:"セキュリティ、オペレーション、料金、サポート", desc:"IAM・料金体系・運用管理", color:"var(--green)"}
+};
+
+/* =========================================================
+   2. LocalStorage ロジック（弱点管理）
+   ========================================================= */
+const STORAGE_KEY = "cdl_quiz_wrong_ids_v1";
+
+function getWrongIds(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : [];
+  }catch(e){ return []; }
+}
+function saveWrongIds(ids){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(ids)); }catch(e){}
+}
+function addWrongId(id){
+  const ids = getWrongIds();
+  if(!ids.includes(id)){
+    ids.push(id);
+    saveWrongIds(ids);
+  }
+}
+function removeWrongId(id){
+  const ids = getWrongIds().filter(x => x !== id);
+  saveWrongIds(ids);
+}
+
+/* =========================================================
+   3. アプリ状態管理
+   ========================================================= */
+const state = {
+  screen: "menu",     // menu | quiz | result
+  mode: null,         // "section" | "weak"
+  sectionId: null,
+  queue: [],          // current quiz question objects
+  index: 0,
+  answered: false,
+  correctCount: 0,
+  wrongCount: 0,
+  selectedChoiceIndex: null
+};
+
+const mainEl = document.getElementById("main");
+const headerTitle = document.getElementById("headerTitle");
+const headerSubtitle = document.getElementById("headerSubtitle");
+
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+/* =========================================================
+   4. 画面: メニュー
+   ========================================================= */
+function renderMenu(){
+  headerTitle.textContent = "Digital Leader クイズ";
+  headerSubtitle.textContent = "試験ガイドに沿った4セクション・全" + QUESTIONS.length + "問";
+
+  const wrongIds = getWrongIds();
+  const wrongCount = wrongIds.length;
+
+  let html = "";
+
+  html += `<button class="weak-btn ${wrongCount===0 ? 'empty' : ''}" id="weakBtn" ${wrongCount===0 ? 'disabled' : ''}>
+      <div class="icon">🔥</div>
+      <div class="txt">
+        <strong>弱点克服モード</strong>
+        <span>${wrongCount===0 ? "まだ間違えた問題はありません" : "間違えた問題だけを集中的に復習"}</span>
+      </div>
+      <div class="badge">${wrongCount}</div>
+    </button>`;
+
+  html += `<div class="section-label">セクションから選ぶ</div>`;
+  html += `<div class="card-grid">`;
+  for(const sec of [1,2,3,4]){
+    const meta = SECTION_META[sec];
+    const total = QUESTIONS.filter(q => q.section === sec).length;
+    const secWrong = QUESTIONS.filter(q => q.section === sec && wrongIds.includes(q.id)).length;
+    html += `<div class="card" data-section="${sec}">
+        <div class="num">${sec}</div>
+        <div class="body">
+          <strong>${meta.title}</strong>
+          <span class="desc">${meta.desc}</span>
+        </div>
+        <div class="meta">
+          <div class="count">全${total}問</div>
+          ${secWrong>0 ? `<div class="count" style="color:var(--red);">要復習 ${secWrong}</div>` : ""}
+        </div>
+        <div class="chev">›</div>
+      </div>`;
+  }
+  html += `</div>`;
+
+  mainEl.innerHTML = html;
+
+  if(wrongCount>0){
+    document.getElementById("weakBtn").addEventListener("click", () => startQuiz("weak", null));
+  }
+  document.querySelectorAll(".card").forEach(card => {
+    card.addEventListener("click", () => {
+      const sec = parseInt(card.getAttribute("data-section"), 10);
+      startQuiz("section", sec);
+    });
+  });
+}
+
+/* =========================================================
+   5. クイズ開始・進行
+   ========================================================= */
+function startQuiz(mode, sectionId){
+  let pool;
+  if(mode === "weak"){
+    const wrongIds = getWrongIds();
+    pool = QUESTIONS.filter(q => wrongIds.includes(q.id));
+    if(pool.length === 0){ renderMenu(); return; }
+  } else {
+    pool = QUESTIONS.filter(q => q.section === sectionId);
+  }
+
+  state.screen = "quiz";
+  state.mode = mode;
+  state.sectionId = sectionId;
+  state.queue = shuffle(pool);
+  state.index = 0;
+  state.correctCount = 0;
+  state.wrongCount = 0;
+  state.answered = false;
+  state.selectedChoiceIndex = null;
+
+  renderQuiz();
+}
+
+function currentQuestion(){
+  return state.queue[state.index];
+}
+
+function renderQuiz(){
+  const q = currentQuestion();
+  const total = state.queue.length;
+  const posi = state.index + 1;
+
+  const isWeakMode = state.mode === "weak";
+  const tagLabel = isWeakMode ? "弱点克服モード" : `セクション${q.section}：${SECTION_META[q.section].title}`;
+
+  headerTitle.textContent = isWeakMode ? "弱点克服モード" : SECTION_META[q.section].title;
+  headerSubtitle.textContent = `第 ${posi} 問 / 全 ${total} 問`;
+
+  let html = `
+    <div class="quiz-header">
+      <div class="back-btn" id="backBtn" title="メニューに戻る">←</div>
+      <div class="progress-wrap">
+        <div class="progress-text"><span>${posi} / ${total}</span><span>正解 ${state.correctCount} ・ 不正解 ${state.wrongCount}</span></div>
+        <div class="progress-bar"><div style="width:${(state.index/total)*100}%"></div></div>
+      </div>
+    </div>
+    <span class="quiz-tag">${tagLabel}</span>
+    <div class="question-card">
+      <p class="question-text">${q.q}</p>
+    </div>
+    <div class="choices" id="choicesWrap">
+  `;
+
+  const letters = ["A","B","C","D"];
+  q.choices.forEach((choiceText, i) => {
+    html += `<div class="choice" data-index="${i}">
+        <div class="badge-letter">${letters[i]}</div>
+        <div class="choice-text">${choiceText}</div>
+      </div>`;
+  });
+
+  html += `</div><div id="explainSlot"></div>`;
+
+  mainEl.innerHTML = html;
+
+  document.getElementById("backBtn").addEventListener("click", () => {
+    if(confirm("クイズを中断してメニューに戻りますか？")){
+      state.screen = "menu";
+      renderMenu();
+    }
+  });
+
+  document.querySelectorAll(".choice").forEach(el => {
+    el.addEventListener("click", () => {
+      if(state.answered) return;
+      handleAnswer(parseInt(el.getAttribute("data-index"), 10));
+    });
+  });
+}
+
+function handleAnswer(selectedIndex){
+  const q = currentQuestion();
+  state.answered = true;
+  state.selectedChoiceIndex = selectedIndex;
+
+  const isCorrect = selectedIndex === q.correct;
+  if(isCorrect){
+    state.correctCount++;
+    removeWrongId(q.id);
+  } else {
+    state.wrongCount++;
+    addWrongId(q.id);
+  }
+
+  const choiceEls = document.querySelectorAll(".choice");
+  choiceEls.forEach((el, i) => {
+    el.classList.add("disabled");
+    if(i === q.correct){
+      el.classList.add("correct");
+      el.insertAdjacentHTML("beforeend", `<div class="result-icon">✓</div>`);
+    } else if(i === selectedIndex){
+      el.classList.add("incorrect");
+      el.insertAdjacentHTML("beforeend", `<div class="result-icon">✕</div>`);
+    } else {
+      el.classList.add("dim");
+    }
+  });
+
+  const explainSlot = document.getElementById("explainSlot");
+  explainSlot.innerHTML = `
+    <div class="explain-box ${isCorrect ? '' : 'wrong-mode'}">
+      <strong class="label">${isCorrect ? '✅ 正解！ 解説' : '📘 不正解 － 解説'}</strong>
+      ${q.explain}
+    </div>
+    <button class="next-btn" id="nextBtn">${state.index + 1 < state.queue.length ? '次の問題へ →' : '結果を見る →'}</button>
+  `;
+
+  document.getElementById("nextBtn").addEventListener("click", goNext);
+
+  // フィードバック確認後にスクロールして見やすくする
+  window.scrollTo({top: mainEl.scrollHeight, behavior:"smooth"});
+}
+
+function goNext(){
+  if(state.index + 1 < state.queue.length){
+    state.index++;
+    state.answered = false;
+    state.selectedChoiceIndex = null;
+    renderQuiz();
+    window.scrollTo({top:0, behavior:"smooth"});
+  } else {
+    renderResult();
+  }
+}
+
+/* =========================================================
+   6. 画面: 結果
+   ========================================================= */
+function renderResult(){
+  state.screen = "result";
+  const total = state.queue.length;
+  const pct = total > 0 ? Math.round((state.correctCount / total) * 100) : 0;
+
+  const isWeakMode = state.mode === "weak";
+  headerTitle.textContent = "結果発表";
+  headerSubtitle.textContent = isWeakMode ? "弱点克服モードの結果" : `${SECTION_META[state.sectionId].title} の結果`;
+
+  let comment = "";
+  if(pct === 100) comment = "パーフェクトです！この調子で他のセクションにも挑戦しましょう。";
+  else if(pct >= 80) comment = "素晴らしい正答率です。間違えた問題を復習して満点を目指しましょう。";
+  else if(pct >= 50) comment = "合格ラインが見えてきました。弱点克服モードで復習しましょう。";
+  else comment = "まずは解説をじっくり読み直し、弱点克服モードで繰り返し復習しましょう。";
+
+  mainEl.innerHTML = `
+    <div class="result-wrap">
+      <div class="result-ring" style="--pct:${pct}">
+        <div class="pct">${pct}<span>%</span></div>
+      </div>
+      <div class="result-title">お疲れさまでした！</div>
+      <div class="result-sub">${comment}</div>
+      <div class="result-stats">
+        <div class="stat-pill ok"><div class="n">${state.correctCount}</div><div class="l">正解</div></div>
+        <div class="stat-pill ng"><div class="n">${state.wrongCount}</div><div class="l">不正解</div></div>
+        <div class="stat-pill"><div class="n">${total}</div><div class="l">出題数</div></div>
+      </div>
+      <div class="result-actions">
+        <button class="next-btn" id="retryBtn">もう一度挑戦する</button>
+        <button class="btn-secondary" id="homeBtn">メニューに戻る</button>
+      </div>
+    </div>
+  `;
+
+  document.getElementById("retryBtn").addEventListener("click", () => {
+    startQuiz(state.mode, state.sectionId);
+  });
+  document.getElementById("homeBtn").addEventListener("click", () => {
+    state.screen = "menu";
+    renderMenu();
+  });
+}
+
+/* =========================================================
+   7. 起動
+   ========================================================= */
+renderMenu();
+</script>
+</body>
+</html>
