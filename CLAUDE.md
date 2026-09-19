@@ -2,6 +2,16 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## 🔄 開発の上昇サイクル / 🔒 セキュリティ＆コスト厳守ルール
+
+このプロジェクトの開発フロー・セキュリティ方針・コスト方針の正式な定義は
+[`docs/manual/development_style.md`](docs/manual/development_style.md) を参照すること。
+修正完了時は同ファイル配下(`docs/manual/`)へ技術履歴サマリーを自動蓄積する。
+
+特に以下は毎セッション厳守:
+- **個人情報・認証情報・クライアント情報をコードにハードコード/読込しない**
+- **コスト・トークン節約のため、コード変更は常に最小限かつ簡潔に。不要な外部ライブラリを勝手に追加しない**
+
 ## Project Overview
 
 **Google Cloud Digital Leader 対策クイズ**は、Google Cloud認定資格「Cloud Digital Leader」の試験対策を行う単一HTMLファイルのWebアプリです(非公式・学習用)。試験ガイドに沿った4セクション構成で全50問を収録しています。
